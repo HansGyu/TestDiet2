@@ -1,7 +1,7 @@
 package com.project.testdiet.model
 
 data class FoodDTO(
-    val 식품코드: String,
+    val 식품코드: String?,
     val 식품명: String,
     val 에너지: Float,
     val 단백질: Float,
