@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.project.testdiet.databinding.ActivityDietBinding
 import com.project.testdiet.model.SharedViewModel
@@ -22,6 +23,22 @@ class DietActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDietBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        sharedViewModel.totalEnergy.observe(this, Observer { totalEnergy ->
+            updateTotalNutritionalValues()
+        })
+
+        sharedViewModel.totalProtein.observe(this, Observer { totalProtein ->
+            updateTotalNutritionalValues()
+        })
+
+        sharedViewModel.totalFat.observe(this, Observer { totalFat ->
+            updateTotalNutritionalValues()
+        })
+
+        sharedViewModel.totalCarbs.observe(this, Observer { totalCarbs ->
+            updateTotalNutritionalValues()
+        })
 
         binding.btnBreakfast.setOnClickListener {
             sharedViewModel.setMealType("breakfast")
@@ -41,6 +58,7 @@ class DietActivity : AppCompatActivity() {
         binding.btnCompleteDiet.setOnClickListener {
             finish()
         }
+        // 초기 데이터 로드
     }
 
     private fun openMealActivity(mealType: String) {
@@ -54,5 +72,21 @@ class DietActivity : AppCompatActivity() {
         sharedViewModel.mealType.observe(this) { mealType ->
             Log.d(TAG, "ViewModel mealType: $mealType")
         }
+    }
+
+    private fun updateTotalNutritionalValues() {
+        val totalEnergy = sharedViewModel.totalEnergy.value ?: 0f
+        val totalProtein = sharedViewModel.totalProtein.value ?: 0f
+        val totalFat = sharedViewModel.totalFat.value ?: 0f
+        val totalCarbs = sharedViewModel.totalCarbs.value ?: 0f
+
+        val totalNutritionalValues = """
+            Total Energy: $totalEnergy kcal
+            Total Protein: $totalProtein g
+            Total Fat: $totalFat g
+            Total Carbs: $totalCarbs g
+        """.trimIndent()
+
+        binding.tvTotalNutritionalValues.text = totalNutritionalValues
     }
 }
