@@ -19,6 +19,7 @@ class SharedViewModel : ViewModel() {
     }
 
     fun addMeal(meal: Meal) {
+
         val currentList = _meals.value ?: mutableListOf()
         currentList.add(meal)
         _meals.value = currentList

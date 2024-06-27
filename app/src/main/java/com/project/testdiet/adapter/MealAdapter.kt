@@ -13,6 +13,7 @@ class MealAdapter(private val meals: MutableList<Meal>, private val listener: On
 
     interface OnItemClickListener {
         fun onItemClick(meal: Meal)
+        fun onItemLongClick(meal: Meal): Boolean
     }
 
     class MealViewHolder(private val binding: ItemMealBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -20,6 +21,9 @@ class MealAdapter(private val meals: MutableList<Meal>, private val listener: On
             binding.mealContent.text = meal.content
             itemView.setOnClickListener {
                 listener.onItemClick(meal)
+            }
+            itemView.setOnLongClickListener {
+                listener.onItemLongClick(meal)
             }
         }
     }

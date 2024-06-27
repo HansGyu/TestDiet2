@@ -52,10 +52,10 @@ class MealActivity : AppCompatActivity() {
 
         apiService = RetrofitClient.retrofitInstance.create(ApiService::class.java)
 
-        val mealType = intent.getStringExtra("mealType")
-        if (mealType != null) {
-            sharedViewModel.setMealType(mealType)
-            Log.d(TAG, "Received mealType from Intent: $mealType")
+        val currentMealType = intent.getStringExtra("mealType")
+        if (currentMealType != null) {
+            sharedViewModel.setMealType(currentMealType)
+            Log.d(TAG, "Received mealType from Intent: $currentMealType")
         } else {
             Log.e(TAG, "MealType is null in Intent")
         }
@@ -115,13 +115,20 @@ class MealActivity : AppCompatActivity() {
     }
 
 
-    private fun addFood(food: FoodDTO) {
+    fun addFood(food: FoodDTO) {
         Toast.makeText(this, "${food.식품명} 추가됨", Toast.LENGTH_SHORT).show()
         Log.d(TAG, "Food added: $food")
 
         val mealType = sharedViewModel.mealType.value
         if (mealType != null) {
-            val newMeal = Meal(mealType = mealType, content = food.식품명)
+            val newMeal = Meal(
+                mealType = mealType,
+                content = food.식품명,
+                energy = food.에너지,
+                protein = food.단백질,
+                fat = food.지방,
+                carbs = food.탄수화물
+            )
             selectedMeals.add(newMeal)
             sharedViewModel.addMeal(newMeal)
             Log.d(TAG, "New meal created: $newMeal")
@@ -129,6 +136,7 @@ class MealActivity : AppCompatActivity() {
             Log.e(TAG, "Meal type is null, cannot create new meal")
         }
     }
+
 
     private fun completeSelection() {
         Log.d(TAG, "Completing selection with meals: $selectedMeals")
